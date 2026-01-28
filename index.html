@@ -8,7 +8,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
         
         const firebaseConfig = {
           apiKey: "AIzaSyDGae21ToP7CVWe93w0U0AC1mXSPBWVM_Y",
@@ -58,5 +58,39 @@
 </footer>
 
 <script src="script.js"></script>
+<script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    
+    // Check auth state
+    onAuthStateChanged(window.firebaseAuth, (user) => {
+        const authLink = document.getElementById('authLink');
+        const editSection = document.getElementById('editProductsSection');
+        
+        if (user) {
+            // User is signed in
+            authLink.textContent = 'My Account';
+            authLink.href = '#';
+            authLink.onclick = function(e) {
+                e.preventDefault();
+                alert('You are already signed in!');
+            };
+            
+            // Check if user is admin
+            const adminEmails = ['erenalmali@icloud.com']; // Add more admin emails here
+            if (adminEmails.includes(user.email)) {
+                editSection.style.display = 'block';
+            }
+        } else {
+            // No user is signed in
+            authLink.textContent = 'Sign Up';
+            authLink.href = 'auth.html';
+            authLink.onclick = null;
+            editSection.style.display = 'none';
+        }
+        
+        // Load products after auth check
+        loadProducts();
+    });
+</script>
 </body>
 </html>

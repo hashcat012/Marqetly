@@ -5,13 +5,18 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Load products when page loads
+// Load products function
 function loadProducts() {
     const products = JSON.parse(localStorage.getItem('products')) || [];
     
     const container = document.getElementById('productGrid');
     if(container) {
         container.innerHTML = '';
+        
+        if(products.length === 0) {
+            container.innerHTML = '<p style="color: #64748b; grid-column: 1/-1; font-size: 1.2rem;">No products available yet.</p>';
+            return;
+        }
         
         products.forEach(product => {
             container.innerHTML += `
@@ -31,29 +36,8 @@ function viewProduct(productId) {
     window.location.href = 'product-detail.html';
 }
 
-// Check user authentication status
-function checkAuthStatus() {
-    // This would normally check Firebase auth state
-    // For demo purposes, we'll just hide/show auth link based on localStorage
-    const authLink = document.getElementById('authLink');
-    if(authLink) {
-        // In real implementation, check Firebase auth state
-        // For now, always show Sign Up button
-        authLink.textContent = 'Sign Up';
-        authLink.href = 'auth.html';
-    }
-}
-
 // Page load events
 window.onload = function() {
+    // Initial load without auth check
     loadProducts();
-    checkAuthStatus();
-    
-    // Check if user is admin for edit button
-    const editSection = document.getElementById('editProductsSection');
-    if(editSection) {
-        // In real implementation, check if user is admin via Firebase
-        // For demo, show edit button
-        editSection.style.display = 'block';
-    }
 };
