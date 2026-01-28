@@ -36,6 +36,46 @@
     </nav>
 </header>
 
+<!-- Profile Sidebar -->
+<div id="profileSidebar" class="sidebar">
+    <div class="sidebar-content">
+        <div class="profile-header">
+            <h3>My Account</h3>
+            <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        </div>
+        
+        <div class="profile-info">
+            <div class="avatar">
+                <span id="userInitial">U</span>
+            </div>
+            <h4 id="userName">User Name</h4>
+            <p id="userEmail">user@example.com</p>
+        </div>
+        
+        <div class="theme-selector">
+            <h4>Theme</h4>
+            <div class="theme-options">
+                <button class="theme-btn active" data-theme="light">Light</button>
+                <button class="theme-btn" data-theme="dark">Dark</button>
+            </div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="#" class="menu-item">
+                <span>My Orders</span>
+            </a>
+            <a href="#" class="menu-item">
+                <span>Wishlist</span>
+            </a>
+            <a href="#" class="menu-item">
+                <span>Settings</span>
+            </a>
+        </div>
+        
+        <button class="logout-btn-sidebar" onclick="signOut()">Sign Out</button>
+    </div>
+</div>
+
 <section class="hero full-screen fade-in">
     <div class="hero-content">
         <h1>Discover Unique POD Designs!</h1>
@@ -65,6 +105,10 @@
     onAuthStateChanged(window.firebaseAuth, (user) => {
         const authLink = document.getElementById('authLink');
         const editSection = document.getElementById('editProductsSection');
+        const profileSidebar = document.getElementById('profileSidebar');
+        const userEmailElement = document.getElementById('userEmail');
+        const userNameElement = document.getElementById('userName');
+        const userInitialElement = document.getElementById('userInitial');
         
         if (user) {
             // User is signed in
@@ -72,11 +116,20 @@
             authLink.href = '#';
             authLink.onclick = function(e) {
                 e.preventDefault();
-                alert('You are already signed in!');
+                toggleSidebar();
             };
             
+            // Update user info
+            userEmailElement.textContent = user.email;
+            const displayName = user.displayName || user.email.split('@')[0];
+            userNameElement.textContent = displayName;
+            userInitialElement.textContent = displayName.charAt(0).toUpperCase();
+            
+            // Show sidebar when clicking My Account
+            profileSidebar.style.display = 'block';
+            
             // Check if user is admin
-            const adminEmails = ['erenalmali@icloud.com']; // Add more admin emails here
+            const adminEmails = ['erenalmali@icloud.com'];
             if (adminEmails.includes(user.email)) {
                 editSection.style.display = 'block';
             }
@@ -86,11 +139,41 @@
             authLink.href = 'auth.html';
             authLink.onclick = null;
             editSection.style.display = 'none';
+            profileSidebar.style.display = 'none';
         }
         
         // Load products after auth check
         loadProducts();
     });
+    
+    // Theme selector
+    document.addEventListener('click', function(e) {
+        if(e.target && e.target.classList.contains('theme-btn')) {
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            e.target.classList.add('active');
+            const theme = e.target.dataset.theme;
+            // Theme change logic would go here
+        }
+    });
+    
+    // Sign out function
+    window.signOut = function() {
+        window.firebaseAuth.signOut().then(() => {
+            window.location.href = 'index.html';
+        });
+    };
+    
+    // Toggle sidebar
+    window.toggleSidebar = function() {
+        const sidebar = document.getElementById('profileSidebar');
+        if(sidebar.style.right === '0px' || sidebar.style.right === '') {
+            sidebar.style.right = '-350px';
+        } else {
+            sidebar.style.right = '0px';
+        }
+    };
 </script>
 </body>
 </html>
