@@ -63,7 +63,7 @@ function toggleSidebar() {
 // Close sidebar when clicking outside
 document.addEventListener('click', function(e) {
     const sidebar = document.getElementById('profileSidebar');
-    if(sidebar.style.right === '0px' && !e.target.closest('.sidebar') && !e.target.closest('#authLink')) {
+    if(sidebar && sidebar.style.right === '0px' && !e.target.closest('.sidebar') && !e.target.closest('#authLink')) {
         sidebar.style.right = '-350px';
     }
 });
@@ -74,35 +74,13 @@ function changeTheme(theme) {
     document.querySelectorAll('.theme-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    // Add active class to clicked button
-    event.target.classList.add('active');
+    // Find the clicked button and add active class
+    const clickedButton = event ? event.target : document.querySelector(`[data-theme="${theme}"]`);
+    if(clickedButton) {
+        clickedButton.classList.add('active');
+    }
     // Theme change logic would go here
     console.log('Theme changed to:', theme);
-}
-
-// Menu functions
-function showOrders(e) {
-    e.preventDefault();
-    alert('No orders yet. Start shopping!');
-}
-
-function showWishlist(e) {
-    e.preventDefault();
-    alert('Your wishlist is empty.');
-}
-
-function showSettings(e) {
-    e.preventDefault();
-    alert('Settings page - Sign out option available below.');
-}
-
-// Sign out function
-function signOut() {
-    // This would normally sign out from Firebase
-    alert('Signing out...');
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 1000);
 }
 
 // Page load events
