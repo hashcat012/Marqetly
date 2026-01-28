@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Marqetly</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Marqetly</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="settings.html" class="active">Settings</a>
+        <a href="#" onclick="goBack()">Back</a>
+    </nav>
+</header>
+
+<section class="settings-container fade-in">
+    <div class="settings-content">
+        <h1>Account Settings</h1>
+        
+        <div class="settings-section">
+            <h2>Profile Information</h2>
+            <div class="profile-settings">
+                <div class="avatar-settings">
+                    <div class="avatar-large">
+                        <span id="userInitialLarge">U</span>
+                    </div>
+                    <button class="change-photo-btn">Change Photo</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" readonly>
+                </div>
+                
+                <button class="save-btn">Save Changes</button>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h2>Preferences</h2>
+            <div class="preferences">
+                <div class="preference-item">
+                    <span>Email Notifications</span>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="preference-item">
+                    <span>Newsletter Subscription</span>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="preference-item">
+                    <span>Dark Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h2>Account Management</h2>
+            <div class="account-actions">
+                <button class="action-btn" onclick="window.location.href='wishlist.html'">
+                    <span>Wishlist</span>
+                    <span class="arrow">→</span>
+                </button>
+                
+                <button class="action-btn" onclick="window.location.href='orders.html'">
+                    <span>My Orders</span>
+                    <span class="arrow">→</span>
+                </button>
+                
+                <button class="action-btn danger" onclick="signOut()">
+                    <span>Sign Out</span>
+                    <span class="arrow">→</span>
+                </button>
+                
+                <button class="action-btn danger" onclick="deleteAccount()">
+                    <span>Delete Account</span>
+                    <span class="arrow">→</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Marqetly. All rights reserved.</p>
+</footer>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+    
+    function signOut() {
+        if(confirm('Are you sure you want to sign out?')) {
+            alert('Signing out...');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+    }
+    
+    function deleteAccount() {
+        if(confirm('Are you sure you want to delete your account? This cannot be undone.')) {
+            alert('Account deleted successfully.');
+            window.location.href = 'index.html';
+        }
+    }
+    
+    // Dark mode toggle
+    document.getElementById('darkModeToggle').addEventListener('change', function() {
+        if(this.checked) {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    });
+    
+    // Page load
+    window.onload = function() {
+        // Set user info
+        document.getElementById('userInitialLarge').textContent = 'U';
+        document.getElementById('email').value = 'user@example.com';
+    };
+</script>
+
+</body>
+</html>
