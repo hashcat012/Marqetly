@@ -32,7 +32,7 @@
     <nav>
         <a href="index.html">Home</a>
         <a href="#products">Products</a>
-        <a href="auth.html" id="authLink">Sign Up</a>
+        <a href="auth.html" id="authLink">Sign In</a>
     </nav>
 </header>
 
@@ -55,19 +55,19 @@
         <div class="theme-selector">
             <h4>Theme</h4>
             <div class="theme-options">
-                <button class="theme-btn active" data-theme="light">Light</button>
-                <button class="theme-btn" data-theme="dark">Dark</button>
+                <button class="theme-btn active" data-theme="light" onclick="changeTheme('light')">Light</button>
+                <button class="theme-btn" data-theme="dark" onclick="changeTheme('dark')">Dark</button>
             </div>
         </div>
         
         <div class="sidebar-menu">
-            <a href="#" class="menu-item">
+            <a href="#" class="menu-item" onclick="showOrders(event)">
                 <span>My Orders</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="#" class="menu-item" onclick="showWishlist(event)">
                 <span>Wishlist</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="#" class="menu-item" onclick="showSettings(event)">
                 <span>Settings</span>
             </a>
         </div>
@@ -135,7 +135,7 @@
             }
         } else {
             // No user is signed in
-            authLink.textContent = 'Sign Up';
+            authLink.textContent = 'Sign In';
             authLink.href = 'auth.html';
             authLink.onclick = null;
             editSection.style.display = 'none';
@@ -144,18 +144,6 @@
         
         // Load products after auth check
         loadProducts();
-    });
-    
-    // Theme selector
-    document.addEventListener('click', function(e) {
-        if(e.target && e.target.classList.contains('theme-btn')) {
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            e.target.classList.add('active');
-            const theme = e.target.dataset.theme;
-            // Theme change logic would go here
-        }
     });
     
     // Sign out function
@@ -173,6 +161,32 @@
         } else {
             sidebar.style.right = '0px';
         }
+    };
+    
+    // Theme change function
+    window.changeTheme = function(theme) {
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        // Theme change logic would go here
+        console.log('Theme changed to:', theme);
+    };
+    
+    // Menu functions
+    window.showOrders = function(e) {
+        e.preventDefault();
+        alert('No orders yet. Start shopping!');
+    };
+    
+    window.showWishlist = function(e) {
+        e.preventDefault();
+        alert('Your wishlist is empty.');
+    };
+    
+    window.showSettings = function(e) {
+        e.preventDefault();
+        alert('Settings page - Sign out option available below.');
     };
 </script>
 </body>

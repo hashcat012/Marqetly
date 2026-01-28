@@ -8,7 +8,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
         
         const firebaseConfig = {
           apiKey: "AIzaSyDGae21ToP7CVWe93w0U0AC1mXSPBWVM_Y",
@@ -39,7 +39,7 @@
 
         <button id="googleLoginBtn" class="google-btn">Sign In with Google</button>
         
-        <p>Already have an account? <a href="#" onclick="showLogin()">Sign In</a></p>
+        <p>Don't have an account? <a href="#" onclick="showRegister()">Sign Up</a></p>
     </div>
 
     <div class="auth-form" id="registerForm">
@@ -53,7 +53,7 @@
 
         <button id="googleRegisterBtn" class="google-btn">Sign Up with Google</button>
         
-        <p>Don't have an account? <a href="#" onclick="showRegister()">Sign Up</a></p>
+        <p>Already have an account? <a href="#" onclick="showLogin()">Sign In</a></p>
     </div>
 
     <div id="message"></div>

@@ -5,7 +5,20 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Load products function
+// Wishlist heart click
+document.addEventListener('click', function(e) {
+    if(e.target && e.target.classList.contains('wishlist-heart')) {
+        e.stopPropagation();
+        e.target.classList.toggle('active');
+        if(e.target.classList.contains('active')) {
+            alert("Added to wishlist!");
+        } else {
+            alert("Removed from wishlist!");
+        }
+    }
+});
+
+// Load products function with wishlist hearts
 function loadProducts() {
     const products = JSON.parse(localStorage.getItem('products')) || [];
     
@@ -21,6 +34,7 @@ function loadProducts() {
         products.forEach(product => {
             container.innerHTML += `
                 <div class="product-card" onclick="viewProduct(${product.id})">
+                    <button class="wishlist-heart">♡</button>
                     <img src="${product.image}" alt="${product.name}">
                     <h3>${product.name}</h3>
                     <p>$${product.price}</p>
@@ -53,6 +67,43 @@ document.addEventListener('click', function(e) {
         sidebar.style.right = '-350px';
     }
 });
+
+// Theme change function
+function changeTheme(theme) {
+    // Remove active class from all theme buttons
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    // Add active class to clicked button
+    event.target.classList.add('active');
+    // Theme change logic would go here
+    console.log('Theme changed to:', theme);
+}
+
+// Menu functions
+function showOrders(e) {
+    e.preventDefault();
+    alert('No orders yet. Start shopping!');
+}
+
+function showWishlist(e) {
+    e.preventDefault();
+    alert('Your wishlist is empty.');
+}
+
+function showSettings(e) {
+    e.preventDefault();
+    alert('Settings page - Sign out option available below.');
+}
+
+// Sign out function
+function signOut() {
+    // This would normally sign out from Firebase
+    alert('Signing out...');
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 1000);
+}
 
 // Page load events
 window.onload = function() {
