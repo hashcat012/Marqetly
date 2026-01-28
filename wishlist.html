@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist - Marqetly</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Marqetly</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="settings.html">Settings</a>
+        <a href="#" onclick="goBack()">Back</a>
+    </nav>
+</header>
+
+<section class="wishlist-container fade-in">
+    <div class="wishlist-content">
+        <h1>My Wishlist</h1>
+        
+        <div class="wishlist-grid" id="wishlistGrid">
+            <!-- Wishlist items will be loaded here -->
+            <div class="empty-wishlist">
+                <div class="heart-icon">♡</div>
+                <h3>Your wishlist is empty</h3>
+                <p>Start adding products you love to your wishlist!</p>
+                <button class="cta-button" onclick="window.location.href='index.html'">Browse Products</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Marqetly. All rights reserved.</p>
+</footer>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+    
+    // Function to load wishlist items
+    function loadWishlist() {
+        // In real implementation, this would load from localStorage or database
+        const wishlistItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+        
+        const container = document.getElementById('wishlistGrid');
+        if(wishlistItems.length > 0) {
+            container.innerHTML = '';
+            wishlistItems.forEach(item => {
+                container.innerHTML += `
+                    <div class="wishlist-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="wishlist-item-info">
+                            <h3>${item.name}</h3>
+                            <p>$${item.price}</p>
+                            <div class="wishlist-item-actions">
+                                <button class="remove-btn" onclick="removeFromWishlist(${item.id})">Remove</button>
+                                <button class="buy-btn" onclick="addToCart(${item.id})">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    }
+    
+    function removeFromWishlist(id) {
+        alert(`Removed item ${id} from wishlist`);
+        // Real implementation would remove from wishlist
+    }
+    
+    function addToCart(id) {
+        alert(`Added item ${id} to cart`);
+        // Real implementation would add to cart
+    }
+    
+    window.onload = function() {
+        loadWishlist();
+    };
+</script>
+
+</body>
+</html>

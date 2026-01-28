@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Marqetly</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Marqetly</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="settings.html">Settings</a>
+        <a href="#" onclick="goBack()">Back</a>
+    </nav>
+</header>
+
+<section class="orders-container fade-in">
+    <div class="orders-content">
+        <h1>My Orders</h1>
+        
+        <div class="orders-list" id="ordersList">
+            <!-- Orders will be loaded here -->
+            <div class="empty-orders">
+                <div class="package-icon">📦</div>
+                <h3>No orders yet</h3>
+                <p>You haven't placed any orders yet.</p>
+                <button class="cta-button" onclick="window.location.href='index.html'">Start Shopping</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Marqetly. All rights reserved.</p>
+</footer>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+    
+    // Function to load orders
+    function loadOrders() {
+        // In real implementation, this would load from database
+        const orders = JSON.parse(localStorage.getItem('orders')) || [];
+        
+        const container = document.getElementById('ordersList');
+        if(orders.length > 0) {
+            container.innerHTML = '';
+            orders.forEach(order => {
+                container.innerHTML += `
+                    <div class="order-item">
+                        <div class="order-header">
+                            <div class="order-number">Order #${order.id}</div>
+                            <div class="order-date">${order.date}</div>
+                            <div class="order-status ${order.status.toLowerCase()}">${order.status}</div>
+                        </div>
+                        <div class="order-details">
+                            <div class="order-total">Total: $${order.total}</div>
+                            <div class="order-items-count">${order.items} items</div>
+                        </div>
+                        <button class="view-order-btn">View Order Details</button>
+                    </div>
+                `;
+            });
+        }
+    }
+    
+    window.onload = function() {
+        loadOrders();
+    };
+</script>
+
+</body>
+</html>
