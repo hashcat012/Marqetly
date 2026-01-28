@@ -36,6 +36,24 @@ function viewProduct(productId) {
     window.location.href = 'product-detail.html';
 }
 
+// Toggle sidebar function
+function toggleSidebar() {
+    const sidebar = document.getElementById('profileSidebar');
+    if(sidebar.style.right === '0px') {
+        sidebar.style.right = '-350px';
+    } else {
+        sidebar.style.right = '0px';
+    }
+}
+
+// Close sidebar when clicking outside
+document.addEventListener('click', function(e) {
+    const sidebar = document.getElementById('profileSidebar');
+    if(sidebar.style.right === '0px' && !e.target.closest('.sidebar') && !e.target.closest('#authLink')) {
+        sidebar.style.right = '-350px';
+    }
+});
+
 // Page load events
 window.onload = function() {
     // Initial load without auth check
