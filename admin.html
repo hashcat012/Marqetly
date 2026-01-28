@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli - Marqetly</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+<div class="admin-container">
+    <h2>Admin Paneli</h2>
+    
+    <div class="admin-sections">
+        <div class="admin-card">
+            <h3>Ürün Ekle</h3>
+            <form id="addProductForm">
+                <input type="text" id="productName" placeholder="Ürün Adı" required>
+                <input type="number" id="productPrice" placeholder="Fiyat" step="0.01" required>
+                <div class="image-upload-section">
+                    <label>Ürün Fotoğrafları:</label>
+                    <input type="file" id="productImages" multiple accept="image/*">
+                    <div id="imagePreview" class="image-preview"></div>
+                </div>
+                <button type="submit">Ürün Ekle</button>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <h3>Ürün Listesi</h3>
+            <div id="adminProducts"></div>
+        </div>
+    </div>
+
+    <button onclick="logout()" class="logout-btn">Çıkış Yap</button>
+</div>
+
+<script>
+    function logout() {
+        localStorage.removeItem('isAdmin');
+        window.location.href = 'auth.html';
+    }
+
+    // Resim önizleme
+    document.getElementById('productImages').addEventListener('change', function(e) {
+        const preview = document.getElementById('imagePreview');
+        preview.innerHTML = '';
+        
+        for(let file of e.target.files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '100px';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                img.style.margin = '5px';
+                img.style.borderRadius = '5px';
+                preview.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Ürün ekleme işlevi
+    document.getElementById('addProductForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('productName').value;
+        const price = document.getElementById('productPrice').value;
+        
+        // Resimleri base64 olarak kaydet
+        const files = document.getElementById('productImages').files;
+        
+        if(files.length === 0) {
+            alert('Lütfen en az bir fotoğraf ekleyin!');
+            return;
+        }
+
+        // Demo için ilk resmi kullan
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const product = {
+                id: Date.now(),
+                name: name,
+                price: parseFloat(price),
+                image: e.target.result,
+                images: [e.target.result] // Demo için tek resim
+            };
+            
+            let products = JSON.parse(localStorage.getItem('products')) || [];
+            products.push(product);
+            localStorage.setItem('products', JSON.stringify(products));
+            
+            loadAdminProducts();
+            this.reset();
+            document.getElementById('imagePreview').innerHTML = '';
+            loadProducts();
+        }
+        reader.readAsDataURL(files[0]);
+    });
+
+    function loadAdminProducts() {
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        const container = document.getElementById('adminProducts');
+        container.innerHTML = '';
+        
+        products.forEach((product, index) => {
+            container.innerHTML += `
+                <div class="admin-product-item">
+                    <img src="${product.image}" alt="${product.name}" width="50">
+                    <span>${product.name} - ₺${product.price}</span>
+                    <button onclick="deleteProduct(${index})">Sil</button>
+                </div>
+            `;
+        });
+    }
+
+    function deleteProduct(index) {
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+        products.splice(index, 1);
+        localStorage.setItem('products', JSON.stringify(products));
+        loadAdminProducts();
+        loadProducts();
+    }
+
+    function loadProducts() {
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        
+        const container = document.getElementById('productGrid');
+        if(container) {
+            container.innerHTML = '';
+            
+            products.forEach(product => {
+                container.innerHTML += `
+                    <div class="product-card" onclick="viewProduct(${product.id})">
+                        <img src="${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>₺${product.price}</p>
+                        <button class="buy-now">Hemen Satın Al</button>
+                    </div>
+                `;
+            });
+        }
+    }
+
+    function viewProduct(productId) {
+        localStorage.setItem('currentProductId', productId);
+        window.location.href = 'product-detail.html';
+    }
+
+    // Sayfa yüklendiğinde
+    window.onload = function() {
+        // Admin kontrolü
+        const isAdmin = localStorage.getItem('isAdmin');
+        if(!isAdmin) {
+            // Firebase auth kontrolü
+            // Burada gerçek uygulamada Firebase auth ile kontrol yapılır
+        }
+        
+        loadAdminProducts();
+        loadProducts();
+    };
+</script>
+
+</body>
+</html>

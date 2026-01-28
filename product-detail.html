@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ürün Detayı - Marqetly</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">Marqetly</div>
+    <nav>
+        <a href="index.html">Anasayfa</a>
+        <a href="auth.html">Giriş Yap / Kayıt Ol</a>
+    </nav>
+</header>
+
+<section class="product-detail-container fade-in">
+    <div class="product-detail-content" id="productDetailContent">
+        <!-- Ürün detayları buraya yüklenecek -->
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Marqetly. Tüm hakları saklıdır.</p>
+</footer>
+
+<script>
+    function loadProductDetail() {
+        const productId = localStorage.getItem('currentProductId');
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        const product = products.find(p => p.id == productId);
+        
+        const container = document.getElementById('productDetailContent');
+        
+        if(product) {
+            container.innerHTML = `
+                <div class="product-images">
+                    <img src="${product.image}" alt="${product.name}" class="main-image">
+                    <div class="thumbnail-images">
+                        <img src="${product.image}" alt="${product.name}" class="thumbnail active">
+                    </div>
+                </div>
+                
+                <div class="product-info">
+                    <h1>${product.name}</h1>
+                    <p class="price">₺${product.price}</p>
+                    <p class="description">Harika bir ${product.name.toLowerCase()} tasarımı. Kendinize özel baskı yaptırabilirsiniz.</p>
+                    
+                    <div class="product-actions">
+                        <button class="add-to-cart">Sepete Ekle</button>
+                        <button class="buy-now-large">Hemen Satın Al</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            container.innerHTML = '<p>Ürün bulunamadı!</p>';
+        }
+    }
+
+    // Sepete ekle ve satın al butonları
+    document.addEventListener('click', function(e) {
+        if(e.target.classList.contains('add-to-cart') || e.target.classList.contains('buy-now-large')) {
+            alert('Ürün sepetinize eklendi!');
+        }
+    });
+
+    window.onload = function() {
+        loadProductDetail();
+    };
+</script>
+
+</body>
+</html>

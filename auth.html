@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap / Kayıt Ol - Marqetly</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyDGae21ToP7CVWe93w0U0AC1mXSPBWVM_Y",
+          authDomain: "marqetly-325d1.firebaseapp.com",
+          projectId: "marqetly-325d1",
+          storageBucket: "marqetly-325d1.firebasestorage.app",
+          messagingSenderId: "214139205962",
+          appId: "1:214139205962:web:c46ccce0b609bdd104e9b3",
+          measurementId: "G-QDGJZ38R2L"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        window.firebaseAuth = getAuth(app);
+        window.GoogleProvider = new GoogleAuthProvider();
+    </script>
+</head>
+<body class="auth-body">
+
+<div class="auth-container fade-in">
+    <div class="auth-form active" id="loginForm">
+        <h2>Giriş Yap</h2>
+        
+        <form id="loginEmailForm">
+            <input type="email" id="loginEmail" placeholder="E-posta" required>
+            <input type="password" id="loginPassword" placeholder="Şifre" required>
+            <button type="submit">Giriş Yap</button>
+        </form>
+
+        <button id="googleLoginBtn" class="google-btn">Google ile Giriş Yap</button>
+        
+        <p>Hesabınız yok mu? <a href="#" onclick="showRegister()">Kayıt Ol</a></p>
+    </div>
+
+    <div class="auth-form" id="registerForm">
+        <h2>Kayıt Ol</h2>
+        
+        <form id="registerEmailForm">
+            <input type="email" id="registerEmail" placeholder="E-posta" required>
+            <input type="password" id="registerPassword" placeholder="Şifre" required>
+            <button type="submit">Kayıt Ol</button>
+        </form>
+
+        <button id="googleRegisterBtn" class="google-btn">Google ile Kayıt Ol</button>
+        
+        <p>Hesabınız var mı? <a href="#" onclick="showLogin()">Giriş Yap</a></p>
+    </div>
+
+    <div id="message"></div>
+</div>
+
+<script type="module">
+    import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+    // Giriş Formu
+    document.getElementById('loginEmailForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const messageDiv = document.getElementById('message');
+        
+        try {
+            await signInWithEmailAndPassword(window.firebaseAuth, email, password);
+            // Admin kontrolü
+            if(email === 'erenalmali@icloud.com') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'index.html';
+            }
+        } catch (error) {
+            messageDiv.innerHTML = '<p style="color: red;">Giriş başarısız: ' + error.message + '</p>';
+        }
+    });
+
+    // Kayıt Formu
+    document.getElementById('registerEmailForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        const messageDiv = document.getElementById('message');
+        
+        try {
+            await createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+            messageDiv.innerHTML = '<p style="color: green;">Kayıt başarılı! Giriş yapabilirsiniz.</p>';
+            setTimeout(() => {
+                showLogin();
+            }, 2000);
+        } catch (error) {
+            messageDiv.innerHTML = '<p style="color: red;">Kayıt başarısız: ' + error.message + '</p>';
+        }
+    });
+
+    // Google Giriş
+    document.getElementById('googleLoginBtn').addEventListener('click', async function() {
+        try {
+            const result = await signInWithPopup(window.firebaseAuth, window.GoogleProvider);
+            const user = result.user;
+            if(user.email === 'erenalmali@icloud.com') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'index.html';
+            }
+        } catch (error) {
+            document.getElementById('message').innerHTML = '<p style="color: red;">Google ile giriş başarısız: ' + error.message + '</p>';
+        }
+    });
+
+    // Google Kayıt
+    document.getElementById('googleRegisterBtn').addEventListener('click', async function() {
+        try {
+            const result = await signInWithPopup(window.firebaseAuth, window.GoogleProvider);
+            document.getElementById('message').innerHTML = '<p style="color: green;">Kayıt başarılı! Hoş geldiniz.</p>';
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        } catch (error) {
+            document.getElementById('message').innerHTML = '<p style="color: red;">Google ile kayıt başarısız: ' + error.message + '</p>';
+        }
+    });
+
+    function showRegister() {
+        document.getElementById('loginForm').classList.remove('active');
+        document.getElementById('registerForm').classList.add('active');
+    }
+
+    function showLogin() {
+        document.getElementById('registerForm').classList.remove('active');
+        document.getElementById('loginForm').classList.add('active');
+    }
+</script>
+
+</body>
+</html>
