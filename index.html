@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marqetly - POD Ürünler</title>
+    <title>Marqetly - POD Products</title>
     <link rel="stylesheet" href="style.css">
     <!-- Firebase SDK -->
     <script type="module">
@@ -30,29 +30,33 @@
 <header class="navbar">
     <div class="logo">Marqetly</div>
     <nav>
-        <a href="index.html">Anasayfa</a>
-        <a href="#products">Ürünler</a>
-        <a href="auth.html">Giriş Yap / Kayıt Ol</a>
+        <a href="index.html">Home</a>
+        <a href="#products">Products</a>
+        <a href="auth.html" id="authLink">Sign Up</a>
     </nav>
 </header>
 
-<section class="hero fade-in">
-    <h1>Özgün POD tasarımları keşfet!</h1>
-    <button onclick="window.location.href='auth.html'" class="cta-button">Hemen Keşfet</button>
+<section class="hero full-screen fade-in">
+    <div class="hero-content">
+        <h1>Discover Unique POD Designs!</h1>
+        <button onclick="window.location.href='auth.html'" class="cta-button">Explore Now</button>
+    </div>
 </section>
 
 <section id="products" class="products slide-up">
-    <h2>Popüler Ürünler</h2>
+    <h2>Popular Products</h2>
     <div class="product-grid" id="productGrid">
-        <!-- Ürünler buraya yüklenecek -->
+        <!-- Products will be loaded here -->
+    </div>
+    <div id="editProductsSection" style="display: none; margin-top: 2rem;">
+        <button onclick="window.location.href='admin.html'" class="edit-products-btn">Edit Products</button>
     </div>
 </section>
 
 <footer>
-    <p>&copy; 2025 Marqetly. Tüm hakları saklıdır.</p>
+    <p>&copy; 2025 Marqetly. All rights reserved.</p>
 </footer>
 
 <script src="script.js"></script>
 </body>
 </html>
-
